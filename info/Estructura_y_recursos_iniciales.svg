@@ -1,0 +1,75 @@
+Guía de Inicio: Stack Tecnológico y Fundamentos de Grafana
+
+Este documento resume lo realizado en el proyecto hasta el momento y explica desde cero qué es Grafana y cómo se integra en el desarrollo de software moderno.
+
+Parte 1: Resumen de lo realizado (Paso a Paso)
+1. Ubicación en el Disco D:
+¿Qué hicimos?: Decidimos crear el proyecto en D:\Proyectos\mi-proyecto en lugar del disco C:.
+¿Por qué?: Las carpetas de dependencias (vendor de PHP y node_modules de React/Tailwind) acumulan miles de pequeños archivos que pueden saturar un disco principal C: con espacio limitado. Mover proyectos a un segundo disco mantiene el sistema operativo desahogado.
+2. PHP 8.5 y Composer
+¿Qué es PHP 8.5?: Es el motor y lenguaje en el que está programado todo el backend (la lógica del servidor).
+¿Qué es Composer?: Es el gestor de paquetes y librerías de PHP. Así como en tu teléfono usas una tienda de aplicaciones para instalar apps, en PHP usas Composer para instalar Laravel y librerías de terceros.
+Ajuste de extensiones (php.ini):
+Para que Composer pudiera descomprimir paquetes, activamos la extensión interna zip.
+Para que las pruebas automatizadas corrieran a máxima velocidad sin depender de una base externa, activamos pdo_sqlite.
+3. Laravel 13 con Breeze (React + Tailwind CSS)
+¿Qué es Laravel 13?: Es el framework backend de PHP más popular del mundo. Provee enrutamiento, seguridad, autenticación, conexión a bases de datos y manejo de sesiones sin reinventar la rueda.
+¿Qué es React?: Es la librería de JavaScript para crear interfaces interactivas en el navegador. En lugar de recargar la página entera en cada clic, React actualiza solo la parte de la pantalla que cambió.
+¿Qué es Tailwind CSS?: Es un framework de diseño visual basado en clases utilitarias (flex, p-4, text-center, bg-blue-500) que permite maquetar interfaces modernas directamente en el código de React.
+¿Qué es Inertia.js?: Es el "puente invisible" entre Laravel y React. Permite que Laravel envíe datos a React directamente como si fuera una vista tradicional, sin necesidad de construir APIs REST complejas separadas.
+4. Pruebas Automatizadas con Pest
+¿Qué es Pest?: Es un framework de pruebas moderno para PHP centrado en la legibilidad y simplicidad sintáctica.
+¿Qué logramos?: Ejecutamos php artisan test y verificamos los 25 tests automáticos en verde en menos de 3 segundos, asegurando que la autenticación, inicio de sesión, cambio de contraseña y perfiles funcionan sin errores.
+Parte 2: ¿Qué es Grafana? (Explicado desde cero)
+
+Si nunca antes habías escuchado de Grafana, la mejor manera de entenderlo es con una analogía del mundo real:
+
+La analogía del tablero de un auto 🚗
+
+Imagina que estás conduciendo un automóvil moderno:
+
+El motor (tu aplicación Laravel y PostgreSQL) está haciendo todo el trabajo mecánico.
+En el motor hay decenas de sensores: temperatura del agua, nivel de combustible, velocidad de las ruedas, presión de los neumáticos.
+Tú como conductor no abres el capó del auto mientras conduces para medir la temperatura con un termómetro. En su lugar, miras el tablero de instrumentos frente al volante: un velocímetro con aguja, luces de alerta roja si falta aceite y un gráfico digital con el consumo de gasolina.
+
+👉 Grafana es exactamente ese tablero de instrumentos digital.
+
++-------------------------------------------------------------+
+|                     TABLERO GRAFANA                         |
+|                                                             |
+|  [ Peticiones/segundo ]      [ Tiempo de respuesta (ms) ]   |
+|         📈 120 req/s                     ⏱️ 45 ms           |
+|                                                             |
+|  [ Errores 500 (Caídas) ]    [ Conexiones PostgreSQL ]      |
+|           🟢 0 errores                   👥 14 activas      |
++-------------------------------------------------------------+
+¿Por qué existe Grafana y qué problema resuelve?
+
+En el desarrollo tradicional, cuando una aplicación falla o se vuelve lenta, los programadores suelen:
+
+Conectarse al servidor por consola.
+Abrir archivos de texto gigantescos llenos de líneas de texto (logs).
+Adivinar qué pasó y a qué hora.
+
+Con Grafana, en lugar de leer texto plano a ciegas, tienes gráficos en tiempo real:
+
+Ves un pico rojo si de repente 50 usuarios recibieron un error.
+Ves una curva ascendente si la base de datos se está quedando sin memoria.
+Puedes configurar alertas: por ejemplo, que te mande un mensaje a Slack o Discord si el servidor tarda más de 2 segundos en responder.
+El detalle clave: Grafana no trabaja solo
+
+Grafana por sí mismo solo sabe dibujar gráficos bonitos. No sabe recopilar datos ni guardarlos. Para funcionar necesita un compañero que guarde los números: Prometheus.
+
+El equipo funciona en 3 piezas:
+
+Tu App Laravel: Cada vez que alguien entra a la web, calcula: "Esta página tardó 32 milisegundos y consumió 12 MB de RAM". Expone una lista de números en una dirección especial (como http://localhost:8000/prometheus).
+Prometheus: Es una base de datos especializada en números con fecha y hora (series temporales). Cada 5 segundos visita tu Laravel, toma nota de los números y los guarda.
+Grafana: Se conecta a Prometheus y te muestra paneles interactivos, medidores de aguja, gráficos de líneas y mapas de calor.
+Parte 3: ¿Qué veremos en Grafana cuando lo conectemos?
+
+Una vez conectado con tu servidor local, podrás ver en tu navegador (http://localhost:3000):
+
+Tráfico en vivo: Cuántas visitas recibe tu proyecto por minuto.
+Latencia (Velocidad): Qué tan rápido responden las rutas de React y Laravel.
+Salud del Sistema: Consumo de memoria RAM de PHP 8.5 y uso de CPU.
+Base de Datos (PostgreSQL): Cuántas consultas SQL se están ejecutando y si hay alguna consulta lenta que esté frenando la app.
