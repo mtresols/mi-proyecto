@@ -1,21 +1,17 @@
 <?php
 
+use App\Http\Controllers\MagazineController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Rutas públicas de la Revista Fanzine Club Social y Federal
+Route::get('/', [MagazineController::class, 'index'])->name('magazine.index');
+Route::get('/articulo/{slug}', [MagazineController::class, 'article'])->name('magazine.article');
+Route::get('/quienes-somos', [MagazineController::class, 'about'])->name('magazine.about');
 
+// Rutas de administración / Auth existentes de Breeze
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return inertia('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

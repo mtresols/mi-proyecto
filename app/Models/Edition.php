@@ -17,6 +17,10 @@ class Edition extends Model
         'year',
         'cover_image',
         'pdf_path',
+        'color_primary',
+        'color_secondary',
+        'quote_text',
+        'quote_author',
         'published_at',
         'is_published',
     ];
