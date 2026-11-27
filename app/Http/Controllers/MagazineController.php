@@ -79,4 +79,19 @@ class MagazineController extends Controller
             'edition' => $latestEdition,
         ]);
     }
+
+        /**
+     * Página de descargas de ediciones completas en PDF.
+     */
+    public function downloads(): Response
+    {
+        $editions = Edition::where('is_published', true)
+            ->orderBy('number')
+            ->withCount('articles')
+            ->get();
+
+        return Inertia::render('Magazine/Downloads', [
+            'editions' => $editions,
+        ]);
+    }
 }

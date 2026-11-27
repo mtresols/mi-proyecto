@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 // Rutas públicas de la Revista Fanzine Club Social y Federal
 Route::get('/', [MagazineController::class, 'index'])->name('magazine.index');
+Route::get('/descargar', [MagazineController::class, 'downloads'])->name('magazine.downloads');
 Route::get('/articulo/{slug}', [MagazineController::class, 'article'])->name('magazine.article');
 Route::get('/quienes-somos', [MagazineController::class, 'about'])->name('magazine.about');
 
